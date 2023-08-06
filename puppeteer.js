@@ -6,35 +6,46 @@ const fs = require('fs');
 
 const app = express();
 
-app.get('/', async (req, res) => {
-  const url = req.query.url; // Get the URL from the query parameters
+app.use(express.json())
+
+app.get('/', (req, res) => {
+  res.status(200).json("Never gonna give up this project")
+})
+
+// body.find('#important-information > div:nth-child(2)').text())
+app.post('/', async (req, res) => {
+  console.log(req.body);
+  const url = req?.body?.url; // Get the URL from the query parameters
 
   if (!url) {
     return res.status(400).send('URL parameter is missing.');
   }
 
+  function processData(data) {
+    console.log('Processing Data...');
+    const $ = cheerio.load(data);
+    const body = $('body');
+    const i = body.find('#important-information > div:nth-child(2)').text().trim();
+    console.log('Complete');
+    return {data:i};
+  }
+
   try {
-    const browser = await puppeteer.launch();
+    
+    const browser = await puppeteer.launch({headless:"true"});
     const page = await browser.newPage();
     await page.goto(url);
     const data = await page.content();
     await browser.close();
-    processData(data);
+    const ingredients = processData(data);
 
-    return res.status(200).send('Data processed successfully.');
+    return res.status(200).json({success:true, ing: ingredients.data});
   } catch (error) {
     console.error(error);
-    return res.status(500).send('An error occurred while processing the data.');
+    return res.status(500).json({success:false, error});
   }
 });
 
-function processData(data) {
-  console.log('Processing Data...');
-  const $ = cheerio.load(data);
-  const body = $('body');
-  fs.writeFileSync('data.json', pretty(body.find('#important-information > div:nth-child(2)').text()));
-  console.log('Complete');
-}
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
