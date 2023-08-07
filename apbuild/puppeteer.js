@@ -1,19 +1,20 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
-const pretty = require('pretty');
-const fs = require('fs');
+const serverless = require('serverless-http');
 
 const app = express();
 
-app.use(express.json())
+const router = express.Router();
 
-app.get('/', (req, res) => {
+router.use(express.json())
+
+router.get('/', (req, res) => {
   res.status(200).json("Never gonna give up this project")
 })
 
 // body.find('#important-information > div:nth-child(2)').text())
-app.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
   console.log(req.body);
   const url = req?.body?.url; // Get the URL from the query parameters
 
@@ -47,6 +48,8 @@ app.post('/', async (req, res) => {
 });
 
 
-app.listen(3000, () => {
-  console.log('Server started on port 3000');
-});
+
+router.use('/.netlify/functions/app', router)
+
+module.exports = app
+module.exports.handler = serverless(app)
