@@ -1,6 +1,8 @@
+'use strict';
+
+const parser = require('node-html-parser');
 const express = require('express');
 const puppeteer = require('puppeteer');
-const cheerio = require('cheerio');
 const serverless = require('serverless-http');
 
 const app = express();
@@ -23,12 +25,12 @@ router.post('/', async (req, res) => {
   }
 
   function processData(data) {
-    console.log('Processing Data...');
-    const $ = cheerio.load(data);
-    const body = $('body');
-    const i = body.find('#important-information > div:nth-child(2)').text().trim();
-    console.log('Complete');
-    return {data:i};
+
+    const dom = parser.parse(data);
+    const ex = dom.querySelector('#important-information > div:nth-child(2)').textContent.trim().replace(/\s+/g, " ");
+    
+    console.log(ex);
+    return {data:ex};
   }
 
   try {
@@ -48,8 +50,6 @@ router.post('/', async (req, res) => {
 });
 
 
-
-router.use('/.netlify/functions/app', router)
-
-module.exports = app
+app.use('/.netlify/functions/puppeteer', router)
+module.exports = router
 module.exports.handler = serverless(app)
