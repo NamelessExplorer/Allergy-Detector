@@ -27,10 +27,13 @@ router.post('/', async (req, res) => {
   function processData(data) {
 
     const dom = parser.parse(data);
-    const ex = dom.querySelector('#important-information > div:nth-child(2)').textContent.trim().replace(/\s+/g, " ");
+    const ex = dom.querySelector('#important-information > div:nth-child(2)');    
+
+    if(ex === null){
+      return {success:false,error:"Cannot scrape data"};
+    }
+    return {success:true,ing:ex.textContent.trim().replace(/\s+/g, " ")};
     
-    console.log(ex);
-    return {data:ex};
   }
 
   try {
@@ -42,7 +45,7 @@ router.post('/', async (req, res) => {
     await browser.close();
     const ingredients = processData(data);
 
-    return res.status(200).json({success:true, ing: ingredients.data});
+    return res.status(200).json(ingredients);
   } catch (error) {
     console.error(error);
     return res.status(500).json({success:false, error});
