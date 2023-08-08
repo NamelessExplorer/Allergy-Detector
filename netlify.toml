@@ -1,3 +1,10 @@
 [build]
-  command = "npm install && npm run build"
-  functions = "functions"
+  command = "echo 'Just a placeholder command for the sake of netlify'"
+[functions]
+  external_node_modules = ["express", "puppeteer", "node-html-parser"]
+  node_bundler = "esbuild"
+[[redirects]]
+  force = true
+  from = "/api/*"
+  status = 200
+  to = "/.netlify/functions/api/:splat"

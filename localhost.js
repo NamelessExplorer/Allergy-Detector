@@ -1,4 +1,4 @@
-const router = require('./apbuild/puppeteer')
+const router = require('./netlify/functions/api')
 const express = require('express')
 
 const app = express();

@@ -50,6 +50,6 @@ router.post('/', async (req, res) => {
 });
 
 
-app.use('/.netlify/functions/puppeteer', router)
+app.use('/api/', router)
 module.exports = router
 module.exports.handler = serverless(app)
