@@ -1,4 +1,4 @@
-const router = require('./netlify/functions/api')
+const router = require('./api')
 const express = require('express')
 
 const app = express();
