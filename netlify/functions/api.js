@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 
 // body.find('#important-information > div:nth-child(2)').text())
 router.post('/', async (req, res) => {
+  
   console.log(req.body);
   const url = req?.body?.url; // Get the URL from the query parameters
 
@@ -27,12 +28,13 @@ router.post('/', async (req, res) => {
   function processData(data) {
 
     const dom = parser.parse(data);
-    const ex = dom.querySelector('#important-information > div:nth-child(2)');    
+    const ex = dom.querySelector('#important-information > div:nth-child(2)');
 
     if(ex === null){
       return {success:false,error:"Cannot scrape data"};
     }
-    return {success:true,ing:ex.textContent.trim().replace(/\s+/g, " ")};
+
+    return {success:true,ing:ex.textContent.trim().replace(/\s+/, " ")};
     
   }
 
