@@ -7,6 +7,13 @@ const serverless = require('serverless-http');
 
 const app = express();
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://ingredient-api.onrender.com'); // Replace with your HTML domain
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 const router = express.Router();
 
 router.use(express.json())
