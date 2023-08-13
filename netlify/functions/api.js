@@ -25,9 +25,12 @@ router.post('/', async (req, res) => {
     return res.status(400).send('URL parameter is missing.');
   }
 
+  
+
   function processData(data) {
 
     const dom = parser.parse(data);
+    console.log(dom)
     const ex = dom.querySelector('#important-information > div:nth-child(2)');
 
     if(ex === null){
