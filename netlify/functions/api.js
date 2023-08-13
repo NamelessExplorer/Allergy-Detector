@@ -33,6 +33,8 @@ router.post('/', async (req, res) => {
     console.log(dom)
     const ex = dom.querySelector('#important-information > div:nth-child(2)');
 
+    console.log(ex);
+
     if(ex === null){
       return {success:false,error:"Cannot scrape data"};
     }
